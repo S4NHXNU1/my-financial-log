@@ -128,7 +128,7 @@
             const usdIn = parseFloat(document.getElementById("usdIn").value);
             const thbIn = parseFloat(document.getElementById("thbIn").value);
 
-            if(isNaN(usdIn) || isNaN(thbIn) || usdIn <= 0 || thbIn <= 0){
+            if(isNaN(usdIn) || isNaN(thbIn) || usdIn === 0 || thbIn <= 0){
                 return;
             }
 

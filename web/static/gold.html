@@ -127,7 +127,7 @@
             const bgIn = parseFloat(document.getElementById("bgIn").value);
             const usdIn = parseFloat(document.getElementById("usdIn").value);
 
-            if(isNaN(bgIn) || isNaN(usdIn) || bgIn <= 0 || usdIn <= 0){
+            if(isNaN(bgIn) || isNaN(usdIn) || bgIn === 0 || usdIn <= 0){
                 return;
             }
 
