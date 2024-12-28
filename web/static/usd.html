@@ -88,14 +88,18 @@
                         //console.log("usd: " + JSON.stringify(usd))
 
                         var totalUsd = 0;
+                        var totalUSD = 0;
                         var totalThb = 0;
                         usd.forEach((data) => {
                             //console.log(data)
-                            totalUsd += data["usd"];
-                            totalThb += data["thb"]*data["usd"];
+                            totalUSD += data["usd"];
+                            if (data["usd"] > 0) {
+                                totalUsd += data["usd"];
+                                totalThb += data["thb"]*data["usd"];
+                            }
                         })
                         const avgThb = totalThb / totalUsd;
-                        document.getElementById("totalUsd").innerHTML = totalUsd.toFixed(2);
+                        document.getElementById("totalUsd").innerHTML = totalUSD.toFixed(2);
                         document.getElementById("avgThb").innerHTML = isNaN(avgThb) ? "0.00" : avgThb.toFixed(2);
 
                         for(i = usd.length-1; i >= 0 && i >= usd.length-3; i--){
@@ -128,7 +132,7 @@
             const usdIn = parseFloat(document.getElementById("usdIn").value);
             const thbIn = parseFloat(document.getElementById("thbIn").value);
 
-            if(isNaN(usdIn) || isNaN(thbIn) || usdIn === 0 || thbIn <= 0){
+            if(isNaN(usdIn) || isNaN(thbIn) || usdIn === 0 || thbIn < 0){
                 return;
             }
 

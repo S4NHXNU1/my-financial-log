@@ -87,14 +87,18 @@
                         _gold = gold;
 
                         var totalBg = 0;
+                        var totalBG = 0;
                         var totalUsd = 0;
                         gold.forEach((data) => {
                             //console.log(data)
-                            totalBg += data["bg"];
-                            totalUsd += data["bg"]*data["usd"];
+                            totalBG += data["bg"];
+                            if (data["bg"] > 0) {
+                                totalBg += data["bg"];
+                                totalUsd += data["bg"]*data["usd"];
+                            }
                         })
                         const avgUsd = totalUsd / totalBg;
-                        document.getElementById("totalBg").innerHTML = totalBg.toFixed(2);
+                        document.getElementById("totalBg").innerHTML = totalBG.toFixed(2);
                         document.getElementById("avgUsd").innerHTML = isNaN(avgUsd) ? "0.00" : avgUsd.toFixed(2);
 
                         for(i = gold.length-1; i >= 0 && i >= gold.length-3; i--){
@@ -127,7 +131,7 @@
             const bgIn = parseFloat(document.getElementById("bgIn").value);
             const usdIn = parseFloat(document.getElementById("usdIn").value);
 
-            if(isNaN(bgIn) || isNaN(usdIn) || bgIn === 0 || usdIn <= 0){
+            if(isNaN(bgIn) || isNaN(usdIn) || bgIn === 0 || usdIn < 0){
                 return;
             }
 
