@@ -16,4 +16,8 @@ func PageController(app fiber.Router) {
 		return c.Status(200).SendFile("./web/static/gold.html")
 	})
 
+	app.Get("/earning", func(c *fiber.Ctx) error {
+		return c.Status(200).SendFile("./web/static/earning.html")
+	})
+
 }

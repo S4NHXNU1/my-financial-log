@@ -17,9 +17,14 @@ type Golds struct {
 	BG  float32 `json:"bg"`
 }
 
+type Earnings struct {
+	THB float32 `json:"thb"`
+}
+
 func ApiController(app fiber.Router) {
 	const USDfilePath = "./configs/data-usd.json"
 	const GoldfilePath = "./configs/data-gold.json"
+	const EarningsfilePath = "./configs/data-earnings.json"
 
 	app.Get("/usd", func(c *fiber.Ctx) error {
 		_usd := []USDs{{THB: 0.0, USD: 0.0}}
@@ -115,5 +120,53 @@ func ApiController(app fiber.Router) {
 		}
 
 		return c.Status(200).JSON(_gold)
+	})
+
+	app.Get("/earning", func(c *fiber.Ctx) error {
+		_earn := []Earnings{{THB: 0.0}}
+
+		jsonData, err := os.ReadFile(EarningsfilePath)
+		if err != nil {
+			_jsonData, err := json.MarshalIndent(_earn, "", "  ")
+			if err != nil {
+				return c.Status(500).JSON(fiber.Map{"error": "Failed to marshal default count"})
+			}
+
+			err = os.WriteFile(EarningsfilePath, _jsonData, 0644)
+			if err != nil {
+				return c.Status(500).JSON(fiber.Map{"error": "Failed to create count.json"})
+			}
+
+			return c.Status(201).JSON(_earn)
+		}
+
+		err = json.Unmarshal(jsonData, &_earn)
+		if err != nil {
+			return c.Status(500).JSON(fiber.Map{"error": "Failed to parse count.json"})
+		}
+
+		return c.Status(200).JSON(_earn)
+	})
+
+	app.Post("/earning", func(c *fiber.Ctx) error {
+		var _earn []Earnings
+
+		if err := c.BodyParser(&_earn); err != nil {
+			return c.Status(400).JSON(fiber.Map{
+				"error": "Failed to parse JSON",
+			})
+		}
+
+		_jsonData, err := json.MarshalIndent(_earn, "", "  ")
+		if err != nil {
+			return c.Status(500).JSON(fiber.Map{"error": "Failed to marshal default count"})
+		}
+
+		err = os.WriteFile(EarningsfilePath, _jsonData, 0644)
+		if err != nil {
+			return c.Status(500).JSON(fiber.Map{"error": "Failed to create count.json"})
+		}
+
+		return c.Status(200).JSON(_earn)
 	})
 }
